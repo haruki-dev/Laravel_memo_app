@@ -38,6 +38,6 @@ Route::post("/folders/{id}/delete", [FolderController::class,"delete"]);
 Route::get("/folders/{id}/tasks/{task_id}/delete", [TaskController::class,"showDeleteForm"])->name("tasks.delete");
 Route::post("/folders/{id}/tasks/{task_id}/delete", [TaskController::class,"delete"]);
 
-Route::get("/", [HomeController::class,"index"])->name("home");
 Auth::routes();
+// Route::get("/", [HomeController::class,"index"])->name("home");
 
