@@ -71,8 +71,8 @@ class FolderController extends Controller
      */
 
     //  public function showEditForm(int $id)
-     public function showEditForm(Folder $folder)
-     {
+    public function showEditForm(Folder $folder)
+    {
         try {
 
             $user = Auth::user();
@@ -85,7 +85,7 @@ class FolderController extends Controller
         } catch(\Throwable $e){
             Log::error('Error FolderController in showEditForm: ' . $e->getMessage());     
         }
-     }
+    }
 
     /**
      *  【フォルダの編集機能】
@@ -150,15 +150,15 @@ class FolderController extends Controller
     // public function delete(int $id)
     public function delete(Folder $folder)
     {
-       $user = Auth::user();
-       $folder = $user->folders()->findOrFail($folder->id);
-       
-       $folder->tasks()->delete();
-       $folder->delete();
-       $folder = Folder::first();
-       return redirect()->route('tasks.index', [
-           'folder' => $folder->id,
-       ]);
+        $user = Auth::user();
+        $folder = $user->folders()->findOrFail($folder->id);
+        
+        $folder->tasks()->delete();
+        $folder->delete();
+        $folder = Folder::first();
+        return redirect()->route('tasks.index', [
+            'folder' => $folder->id,
+        ]);
     }
 
     
