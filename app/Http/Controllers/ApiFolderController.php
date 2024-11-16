@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFolderRequest;
 use App\Models\Folder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class ApiFolderController extends Controller
 {
@@ -15,11 +17,11 @@ class ApiFolderController extends Controller
      */
     public function index()
     {
-        $folders = Folder::all();
-        return response()->json([
-            'status' => true,
-            'folders' => $folders
-        ], 200);
+        $folders = Folder::with('tasks')->get();
+        return response()->json(
+            $folders,
+            200,
+        );
     }
     
     
@@ -31,6 +33,7 @@ class ApiFolderController extends Controller
     public function store(StoreFolderRequest $request)
     {
         $folder = Folder::create($request->all());
+        // Log::debug($folder);
         return response()->json([
             'status' => true,
             'message' => 'Folder Created successfully!',
@@ -44,7 +47,7 @@ class ApiFolderController extends Controller
      * @param  \App\Models\Folder  $folder
      * @return \Illuminate\Http\Response
      */
-    public function show(Folder $id)
+    public function show(String $id)
     {
         $folders = Folder::find($id);
         if($folders){
@@ -66,10 +69,10 @@ class ApiFolderController extends Controller
      * @param  \App\Models\Folder  $folder
      * @return \Illuminate\Http\Response
      */
-    public function edit(Folder $folder)
-    {
-        //
-    }
+    // public function edit(Folder $folder)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -78,18 +81,21 @@ class ApiFolderController extends Controller
      * @param  \App\Models\Folder  $folder
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Folder $id)
+    public function update(Request $request, String $id)
     {
         $update = [
             'title' => $request->title,
             // 'article' => $request->article
         ];
         $folder =  Folder::where('id', $id)->update($update);
+        Log::debug($id);
+        Log::debug($update);
+        Log::debug($folder);
         $folders = Folder::all();
         if ($folder) {
             return response()->json([
                 'message'=> 'Folder update',
-                'data' => $folders
+                'data' => $folder
             ], 200);
         } else {
             return response()->json([
@@ -104,7 +110,7 @@ class ApiFolderController extends Controller
      * @param  \App\Models\Folder  $folder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Folder $id)
+    public function destroy(String $id)
     {
         $folder = Folder::where('id', $id)->delete();
         if ($folder) {

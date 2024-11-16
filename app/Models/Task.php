@@ -21,6 +21,11 @@ class Task extends Model
     */
 
 
+    public function folder(){
+        return $this->belongTo(Folder::class);
+    }
+
+
     const STATUS = [
         1 => [ 'label' => '未着手', 'class' => 'label-danger' ],
         2 => [ 'label' => '着手中', 'class' => 'label-info' ],
@@ -59,7 +64,7 @@ class Task extends Model
     public function getFormattedDueDateAttribute()
     {
         return Carbon::createFromFormat('Y-m-d', $this->attributes['due_date'])
-         ->format('Y/m/d');
+        ->format('Y/m/d');
     }
 
 
